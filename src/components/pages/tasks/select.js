@@ -13,8 +13,6 @@ import Box from '@material-ui/core/Box';
 
 import { axiosInstance } from '../../../sevices/http/http';
 
-import { useParams } from "react-router-dom";
-
 class selectTasks extends Component {
 
   constructor(){
@@ -25,11 +23,11 @@ class selectTasks extends Component {
   }
 
   componentDidMount() {
-    const { id, field } = this.props.match.params;
+    // const { id, field } = this.props.match.params;
     
-          axiosInstance.get(`tasks/${field}/${id}`)
+    //       axiosInstance.get(`tasks/${field}/${id}`)
+          axiosInstance.get(this.props.match.url)
             .then(response => {
-                console.log('response tasks',response)
 
                 let tasks = response.data.data;
                     this.setState({
@@ -90,16 +88,6 @@ class selectTasks extends Component {
                     </Grid>
                   ))}
                 </Grid>
-                <Box mt={8}>
-                  <Typography variant="body2" color="textSecondary" align="center">
-                    {'Copyright © '}
-                    < Link color = "inherit" to='/'>
-                      toDoit
-                    </Link>{' '}
-                    {new Date().getFullYear()}
-                    {'.'}
-                  </Typography>
-                </Box>
               </Container>
             </main>
           </React.Fragment>

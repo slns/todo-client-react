@@ -2,6 +2,22 @@
 
 import React from 'react'
 import { makeStyles } from '@material-ui/core'
+import Link from '@material-ui/core/Link';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © '}
+      <Link color="inherit" to='/'>
+        toDoit
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,7 +38,9 @@ export default function Footer () {
   return (
     <div className={classes.root}>
       <div className={classes.footer}>
-        Made by community for the community.
+        <Box mt={5}>
+        <Copyright />
+      </Box>
       </div>
     </div>
   )

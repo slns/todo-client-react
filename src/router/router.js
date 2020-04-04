@@ -4,30 +4,56 @@ import React from 'react'
 import {
   BrowserRouter,
   Switch,
-  Route
+  Route,
+  Redirect
 } from "react-router-dom";
-import Header from '../components/organisms/header'
-import Footer from '../components/organisms/footer'
-import publicRoutes from './publicRoutes'
 import { Container } from '@material-ui/core'
 
-export default function Router () {
+import Header from '../components/organisms/header'
+import Footer from '../components/organisms/footer'
+import { listPublicRoutes, listPrivateRoutes, notFoundRoute } from './routes-list';
+import PrivateRoute from './privateRoutes';
+import NotFound from '../components/pages/not-found'
+import { userLogged } from '../sevices/http'
+
+
+export default function Router (props) {
   return (
-    <BrowserRouter>
+    <BrowserRouter >
       <Container maxWidth="md">
         <Header/>
          <main style={{ marginBottom: '3rem'}}>
          <Switch>
-            {publicRoutes.routes.map((route) => {
-             return (
-                <Route
-                  key={route.name}
-                  exact={route.root}
-                  path={route.path}
-                  render={(props) => (<route.comp {...props}/>)}
-                />
-              )
-            })}
+              {listPublicRoutes.routes.map((route) => {
+              return (
+                  <Route
+                    key={route.name}
+                    exact={route.root}
+                    path={route.path}
+                    render={(props) => (<route.component {...props}/>)}
+                  />
+                )
+              })}
+            {/* <PrivateRoute> */}
+              {listPrivateRoutes.routes.map((route) => (route.component ? (
+
+                  <Route
+                    key={route.name}
+                    exact={route.root}
+                    path={route.path}
+                    render={(props) => (
+                      userLogged()
+                        ? <route.component {...props} />
+                        : <Redirect to="/" />
+                    )}
+                  />
+
+                ) : (null)))
+            }
+            
+              <Route component={NotFound} />
+            {/* </PrivateRoute> */}
+            {/* <Route component={NotFound} /> */}
           </Switch>
         </main>
       </Container>

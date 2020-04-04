@@ -6,12 +6,13 @@ import CardContent from '@material-ui/core/CardContent';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-//import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-//import Link from '@material-ui/core/Link';
-import Box from '@material-ui/core/Box';
 import { withStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+
+import { NewProjectCard } from '../../molecules';
+import DeletedConfirmation from '../../atoms/deleted-confirmation'
+
 
 import { axiosInstance } from '../../../sevices/http/http';
 
@@ -36,14 +37,14 @@ const styles = (theme) => ({
 
 class selectProjects extends Component {
 
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
     this.state = {
       recentProjects: []
     }
   }
 
-  componentDidMount() {
+  componentDidMount(props) {
           axiosInstance.get('projects')
               .then(response => {
 
@@ -53,16 +54,20 @@ class selectProjects extends Component {
                     })
               })
               .catch(function (error) {
-                  console.log('Login  error', error);
+                console.log('Login  error', error);
+                //props.history.push("/");
+               this.props.history.push("/");
               });  
   }
 
   render() {
     const {classes} = this.props;
     return (
-          <React.Fragment>
+      
+      <React.Fragment>
+        <NewProjectCard />
             <CssBaseline />
-            <main>
+        <main>       
               <Container className={classes.cardGrid} maxWidth="md">
                 <Grid container spacing={4}>
                   {this.state.recentProjects.map((project) => (
@@ -85,21 +90,15 @@ class selectProjects extends Component {
                           <Button size="small" color="primary">
                             Edit
                           </Button>
+                          <DeletedConfirmation id={project.id} field="projects"/>
+                          {/* <IconButton aria-label="delete" color="secondary">
+                            <DeleteIcon />
+                          </IconButton> */}
                         </CardActions>
                       </Card>
                     </Grid>
                   ))}
                 </Grid>
-                <Box mt={8}>
-                  <Typography variant="body2" color="textSecondary" align="center">
-                    {'Copyright © '}
-                    < Link color="inherit" to='/' className={classes.link}>
-                      toDoit
-                    </Link>{' '}
-                    {new Date().getFullYear()}
-                    {'.'}
-                  </Typography>
-                </Box>
               </Container>
             </main>
           </React.Fragment>

@@ -4,9 +4,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Link from '@material-ui/core/Link';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,19 +18,6 @@ import {
   validateEmail,
   validatePassword
 } from '../../atoms/validet-inputs';
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" to='/'>
-        toDoit
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -87,6 +72,7 @@ const { vertical, horizontal, open } = state;
     const [errorEmail, setErrorEmail] = useState(false);
     const [errorPassword, setErrorPassword] = useState(false);
     const [errorValidateForm, setErrorValidateForm] = useState(true);
+    const [errorMessge, setErrorMessge] = useState('');
 
     const emailValidate = () => {
       !validateEmail(email) ? setErrorEmail(true) : setErrorEmail(false);
@@ -114,7 +100,7 @@ const { vertical, horizontal, open } = state;
         props.history.push("/projects");
         })
         .catch(function (error) {
-          console.log('Login  error', error);
+          setErrorMessge(error.response.data.message);
           handleClick({ vertical: 'top', horizontal: 'center' })
           props.history.push("/");
         });
@@ -181,7 +167,7 @@ const { vertical, horizontal, open } = state;
             onClose={handleClose}
           >
             <Alert onClose={handleClose} severity="error">
-              There is an error in your login!
+              There is an error in your login! <h5>{errorMessge}</h5>
             </Alert>
           </Snackbar>
           <Grid container>
@@ -198,9 +184,6 @@ const { vertical, horizontal, open } = state;
           </Grid> 
         </form>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
-    </Container>
+     </Container>
   );
 }

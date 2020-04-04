@@ -3,8 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -12,7 +10,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
+import { axiosInstance } from '../../../sevices/http/http';
 import {
     validateFirstName,
     validateLastName,
@@ -31,6 +32,10 @@ function Copyright() {
       {'.'}
     </Typography>
   );
+}
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -53,8 +58,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp() {
+export default function SignUp(props) {
     const classes = useStyles();
+    
+    const [state, setState] = useState({
+      open: false,
+      vertical: 'top',
+      horizontal: 'center',
+    });
+  
+    const { vertical, horizontal, open } = state;
+
+    const handleClick = (newState) => {
+      setState({ open: true, ...newState });
+    };
+
+    const handleClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+
+      setState({ ...state, open: false });
+    };
     
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -69,6 +94,7 @@ export default function SignUp() {
     const [errorFirstName, setErrorFirstName] = useState(false);
     const [errorLastName, setErrorLastName] = useState(false);
     const [errorValidateForm, setErrorValidateForm] = useState(true);
+    const [errorMessge, setErrorMessge] = useState('');
 
     const firstNameValidate = () => {
         !validateFirstName(firstName) ? setErrorFirstName(true) : setErrorFirstName(false);
@@ -99,9 +125,7 @@ export default function SignUp() {
     }
   
   const handleSubmit = event => {
-
     event.preventDefault();
-    console.log('props', props)
 
       const user = {
         name: `${firstName}  ${lastName}`,
@@ -113,10 +137,11 @@ export default function SignUp() {
       axiosInstance.post('users', user)
       .then(function (response) {
         console.log('Login  response', response);
-        props.history.push("/login");
+        props.history.push("/");
         })
         .catch(function (error) {
-            console.log('Login  error', error);
+            setErrorMessge(error.response.data.message);
+            handleClick({ vertical: 'top', horizontal: 'center' })
             props.history.push("/sign-up");
         });
   }
@@ -234,9 +259,18 @@ export default function SignUp() {
             variant="contained"
             color="primary"
             className={classes.submit}
+          >Sign Up</Button>
+          <Snackbar
+            open={open}
+            anchorOrigin={{ vertical, horizontal }}
+            key={`${vertical},${horizontal}`}
+            autoHideDuration={5000}
+            onClose={handleClose}
           >
-            Sign Up
-          </Button>
+            <Alert onClose={handleClose} severity="error">
+              There is an error in your register! <h5>{errorMessge}</h5>
+            </Alert>
+          </Snackbar>
           <Grid container justify="flex-end">
             <Grid item>
               <Link href="/" variant="body2">
@@ -246,9 +280,7 @@ export default function SignUp() {
           </Grid>
         </form>
       </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
+      
     </Container>
   );
 }

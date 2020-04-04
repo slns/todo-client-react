@@ -10,7 +10,7 @@ import {
   makeStyles
 } from '@material-ui/core'
 
-import { getUserSession } from '../../../sevices/http'
+import { getUserSession, userLogged } from '../../../sevices/http'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,11 +36,12 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Header () {
-  const [auth, setAuth] = useState(false)
+  const [auth, setAuth] = useState()
   const [userName, setUserName] = useState('')
 
   useEffect(() => {
     showUserName(); 
+    setAuth(userLogged())
   }, [])
     
   const appBarCustomStyle = {
@@ -56,7 +57,6 @@ export default function Header () {
   };
 
   const showUserName = () => {
-    console.log('getUserSession()', getUserSession())
     const user = getUserSession();
     if (user) {
        return setUserName(user.name);
@@ -79,8 +79,8 @@ export default function Header () {
                   Projects
                 </Link>
               </Button>
-              <Button color='inherit'>
-                <Link to='/' onClick={handleLogout} className={classes.link}>
+              <Button color='inherit' onClick={handleLogout}>
+                <Link to='/' className={classes.link}>
                   Logout
                 </Link>
               </Button>

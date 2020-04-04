@@ -34,6 +34,10 @@ export function setTokenSession(token) {
     localStorage.setItem('token', token);
 }
 
+export function userLogged() {
+   return !!getTokenSession();
+}
+
 axiosInstance.interceptors.request.use(
     request => interceptorRequest(request)
 )

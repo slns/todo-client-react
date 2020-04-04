@@ -7,6 +7,7 @@ module.exports = {
 	mode: 'development',
 	devtool: 'source-map',
 	entry: [
+		'babel-polyfill',
 		'react-hot-loader/patch',
 		'webpack-dev-server/client?http://localhost:3005',
 		'webpack/hot/only-dev-server',
@@ -33,6 +34,14 @@ module.exports = {
 				exclude: /node_modules/,
 				include: /src/,
 				loader: 'json-loader'
+			},
+			{
+				test: /\.(css|scss)$/,
+				use: [
+					'style-loader',
+					'css-loader',
+					'sass-loader'
+				]
 			}
 		]
 	}
