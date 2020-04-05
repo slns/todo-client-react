@@ -11,7 +11,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { Link, Redirect } from 'react-router-dom';
 
 import { NewProjectCard } from '../../molecules';
-import DeletedConfirmation from '../../atoms/deleted-confirmation'
+import DeletedConfirmation from '../../atoms/deleted-confirmation';
+import Header from '../../organisms/header';
 
 
 import { axiosInstance } from '../../../sevices/http/http';
@@ -38,7 +39,8 @@ const styles = (theme) => ({
 class selectProjects extends Component {
 
   constructor(props){
-    super(props)
+    super(props);
+    this.handlerForceUpdate = this.handlerForceUpdate.bind(this);
     this.state = {
       recentProjects: []
     }
@@ -54,10 +56,14 @@ class selectProjects extends Component {
                     })
               })
               .catch(function (error) {
-                console.log('Login  error', error);
                 //props.history.push("/");
                this.props.history.push("/");
               });  
+  }
+
+  handlerForceUpdate() {
+   // this.forceUpdate();
+    this.componentDidMount();
   }
 
   render() {
@@ -65,7 +71,8 @@ class selectProjects extends Component {
     return (
       
       <React.Fragment>
-        <NewProjectCard />
+        <Header/>
+        <NewProjectCard action={this.handlerForceUpdate}/>
             <CssBaseline />
         <main>       
               <Container className={classes.cardGrid} maxWidth="md">
@@ -90,10 +97,10 @@ class selectProjects extends Component {
                           <Button size="small" color="primary">
                             Edit
                           </Button>
-                          <DeletedConfirmation id={project.id} field="projects"/>
-                          {/* <IconButton aria-label="delete" color="secondary">
-                            <DeleteIcon />
-                          </IconButton> */}
+                          <DeletedConfirmation
+                            action={this.handlerForceUpdate}
+                            id={project.id}
+                            field="projects" />
                         </CardActions>
                       </Card>
                     </Grid>

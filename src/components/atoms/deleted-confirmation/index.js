@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -15,8 +15,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
+//const useForceUpdate = () => useState()[1];
+
+
 export default function DeletedConfirmation(props) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [, forceUpdate] = useState();
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -28,16 +33,14 @@ export default function DeletedConfirmation(props) {
     
     const handleDelete = event => {
         event.preventDefault();
-
-        console.log('props.id',props.id)
-        console.log('props.field',props.field)
     
       axiosInstance.delete(`/${props.field}/${props.id}`)
       .then(function (response) {
-        props.history.push("/projects");
+        handleClose();
+        props.action();
         })
         .catch(function (error) {
-          setErrorMessge(error.response.data.message);
+          setErrorMessge('error.response.data.message');
           handleClick({ vertical: 'top', horizontal: 'center' })
           props.history.push("/");
         });

@@ -41,6 +41,17 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  link: {
+      color: 'black',
+      textDecoration: 'none'
+    },
+    title: {
+      flexGrow: 1,
+      fontFamily: ['Montserrat', 'sans-serif'],
+      fontSize: '1.75rem',
+      fontWeight: 'bold',
+      marginTop: '15px'
+    }
 }));
 
 export default function Login(props) {
@@ -107,6 +118,12 @@ const { vertical, horizontal, open } = state;
   }
 
   return (
+    <div>
+      <Typography variant='h5' className={classes.title}>
+            <Link to='/' className={classes.link}>
+              toDoit
+            </Link>
+      </Typography>
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -184,6 +201,7 @@ const { vertical, horizontal, open } = state;
           </Grid> 
         </form>
       </div>
-     </Container>
+      </Container>
+      </div>
   );
 }

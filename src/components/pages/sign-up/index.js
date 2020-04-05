@@ -21,18 +21,6 @@ import {
     validatePassword
 } from '../../atoms/validet-inputs';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="/">
-        toDoit
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -56,6 +44,17 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  link: {
+    color: 'black',
+    textDecoration: 'none'
+  },
+  title: {
+    flexGrow: 1,
+    fontFamily: ['Montserrat', 'sans-serif'],
+    fontSize: '1.75rem',
+    fontWeight: 'bold',
+    marginTop: '15px'
+  }
 }));
 
 export default function SignUp(props) {
@@ -147,7 +146,15 @@ export default function SignUp(props) {
   }
 
   return (
+    <div>
+      <Typography variant='h5' className={classes.title}>
+            <Link to='/' className={classes.link}>
+              toDoit
+            </Link>
+      </Typography>
+    
     <Container component="main" maxWidth="xs">
+      
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -281,6 +288,7 @@ export default function SignUp(props) {
         </form>
       </div>
       
-    </Container>
+      </Container>
+      </div>
   );
 }

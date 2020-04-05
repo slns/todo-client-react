@@ -1,27 +1,22 @@
 'use strict'
 
-import React from 'react'
-import {
-  BrowserRouter,
-  Switch,
-  Route,
-  Redirect
-} from "react-router-dom";
-import { Container } from '@material-ui/core'
+import React from 'react';
+import { BrowserRouter, Switch, Route, Redirect,Link } from "react-router-dom";
+import { Container } from '@material-ui/core';
 
-import Header from '../components/organisms/header'
-import Footer from '../components/organisms/footer'
+import Header from '../components/organisms/header';
+import Footer from '../components/organisms/footer';
 import { listPublicRoutes, listPrivateRoutes, notFoundRoute } from './routes-list';
 import PrivateRoute from './privateRoutes';
-import NotFound from '../components/pages/not-found'
-import { userLogged } from '../sevices/http'
+import NotFound from '../components/pages/not-found';
+import { userLogged } from '../sevices/http';
 
+export default function Router(props) {
 
-export default function Router (props) {
   return (
     <BrowserRouter >
       <Container maxWidth="md">
-        <Header/>
+        {/* <Header/> */}
          <main style={{ marginBottom: '3rem'}}>
          <Switch>
               {listPublicRoutes.routes.map((route) => {
@@ -36,7 +31,6 @@ export default function Router (props) {
               })}
             {/* <PrivateRoute> */}
               {listPrivateRoutes.routes.map((route) => (route.component ? (
-
                   <Route
                     key={route.name}
                     exact={route.root}
@@ -47,10 +41,8 @@ export default function Router (props) {
                         : <Redirect to="/" />
                     )}
                   />
-
                 ) : (null)))
-            }
-            
+            }          
               <Route component={NotFound} />
             {/* </PrivateRoute> */}
             {/* <Route component={NotFound} /> */}

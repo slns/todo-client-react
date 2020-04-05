@@ -36,32 +36,34 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Header () {
-  const [auth, setAuth] = useState()
-  const [userName, setUserName] = useState('')
+  const [auth, setAuth] = useState();
+  const [userName, setUserName] = useState('');
+
+  const classes = useStyles();
 
   useEffect(() => {
-    showUserName(); 
+    showUserName();
     setAuth(userLogged())
-  }, [])
+  }, []);
     
   const appBarCustomStyle = {
     background: 'transparent',
     boxShadow: 'none',
     color: 'black',
     fontWeight: 'bold'
-  }
-  const classes = useStyles()
+  };
 
   const handleLogout = () => {
     localStorage.clear();
+    setAuth(userLogged());
   };
 
   const showUserName = () => {
     const user = getUserSession();
     if (user) {
-       return setUserName(user.name);
+      return setUserName(user.name);
     }
-  }
+  };
 
   return (
     <div className={classes.root}>
