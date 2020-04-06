@@ -10,7 +10,7 @@ import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
 import { Link, Redirect } from 'react-router-dom';
 
-import { NewProjectCard } from '../../molecules';
+import { NewObjectCard } from '../../molecules';
 import DeletedConfirmation from '../../atoms/deleted-confirmation';
 import Header from '../../organisms/header';
 
@@ -72,7 +72,7 @@ class selectProjects extends Component {
       
       <React.Fragment>
         <Header/>
-        <NewProjectCard action={this.handlerForceUpdate}/>
+        <NewObjectCard field="project" object="Project" action={this.handlerForceUpdate}/>
             <CssBaseline />
         <main>       
               <Container className={classes.cardGrid} maxWidth="md">

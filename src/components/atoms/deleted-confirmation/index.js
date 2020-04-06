@@ -32,18 +32,21 @@ export default function DeletedConfirmation(props) {
   };
     
     const handleDelete = event => {
-        event.preventDefault();
-    
-      axiosInstance.delete(`/${props.field}/${props.id}`)
-      .then(function (response) {
-        handleClose();
-        props.action();
-        })
-        .catch(function (error) {
-          setErrorMessge('error.response.data.message');
-          handleClick({ vertical: 'top', horizontal: 'center' })
-          props.history.push("/");
-        });
+      event.preventDefault();
+      const deleted = props.field
+            ? axiosInstance.delete(`/${props.field}/${props.id}`)
+            : axiosInstance.delete(`/${props.id}`);
+
+      deleted
+        .then(function (response) {
+          handleClose();
+          props.action();
+          })
+          .catch(function (error) {
+            setErrorMessge('error.response.data.message');
+            handleClick({ vertical: 'top', horizontal: 'center' })
+            props.history.push("/");
+          });
   }
 
   return (

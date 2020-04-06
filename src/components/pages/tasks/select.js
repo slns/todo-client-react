@@ -10,8 +10,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
+import Switche from '../../atoms/switche.js';
 
 import { axiosInstance } from '../../../sevices/http/http';
+import Header from '../../organisms/header';
 
 class selectTasks extends Component {
 
@@ -29,7 +31,8 @@ class selectTasks extends Component {
           axiosInstance.get(this.props.match.url)
             .then(response => {
 
-                let tasks = response.data.data;
+              let tasks = response.data.data;
+              console.log('tasks',tasks)
                     this.setState({
                       recentTasks: tasks
                     })
@@ -59,7 +62,8 @@ class selectTasks extends Component {
 
   render(){
     return (
-          <React.Fragment>
+      <React.Fragment>
+        <Header/>
             <CssBaseline />
         <main>
           <h1 align="center">{'Project'}</h1>
@@ -69,17 +73,20 @@ class selectTasks extends Component {
                     <Grid item key={card.id} xs={12} sm={6} md={4}>
                       <Card className={makeStyles.card}>
                         <CardContent className={makeStyles.cardContent}>
-                          <Typography gutterBottom variant="h5" component="h2">
-                            {card.description}
-                          </Typography>
+                          <div style={{textDecoration: `${card.done ? "line-through" : ""}` }}>
+                              <Typography gutterBottom variant="h5" component="h2">
+                                {card.description}
+                              </Typography>
+                            </div>
                           {/* <Typography>
                             Description
                           </Typography> */}
                         </CardContent>
                         <CardActions>
-                          <Button size="small" color="primary">
+                          <Switche checked={card.done} task={card}/>
+                          {/* <Button size="small" color="primary">
                             View
-                          </Button>
+                          </Button> */}
                           <Button size="small" color="primary">
                             Edit
                           </Button>

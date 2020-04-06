@@ -13,11 +13,11 @@ import { axiosInstance } from '../../../sevices/http/http';
 import { validateName } from '../../atoms/validet-inputs';
 import MessageAlert from '../../atoms/message-alert';
 
-import './new-project-card.css';
+import './new-object-card.css';
 
 
-export function NewProjectCard(props) {
-    const [projectName, setProjectName] = useState();
+export function NewObjectCard(props) {
+    const [objectName, setObjectName] = useState();
     const [open, setOpen] = useState(false);
     const [error, setError] = useState(false);
     const [errorName, setErrorName] = useState(false);
@@ -33,19 +33,19 @@ export function NewProjectCard(props) {
         setOpen(false);
     };
 
-    const createProject = async () => {
-        const project = {
-            name: projectName
+    const createObject = async () => {
+        const object = {
+            name: objectName
         }
         try {
-            const data = await axiosInstance.post('projects', project);
+            const data = await axiosInstance.post(`${props.field}`, object);
             const { status } = data;
             if (status) {
                 setError(false);
-                setMessage('Project successfully created.');
+                setMessage('Object successfully created.');
                 ref.current.handleClick();
-                setProjectName('')
-                document.getElementById("projectName").value = "";
+                setObjectName('')
+                document.getElementById("objectName").value = "";
                 //setOpen(false);
                 props.action();
             };
@@ -53,26 +53,25 @@ export function NewProjectCard(props) {
             ref.current.handleClick();
             setError(true)
             setMessage(error);
-        }
-        
+        }       
     }
 
     return (
         <div>
             <Grid container alignItems="flex-start" justify="center" direction="row" >
                 <Button variant="contained" color="primary" onClick={handleClickOpen} >
-                    Create new Project
+                    Create new {props.object}
                 </Button>
             </Grid>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <MessageAlert ref={ref} message={message} error={error}/>
-                <DialogTitle id="form-dialog-title">Project</DialogTitle>
+                <DialogTitle id="form-dialog-title">{props.object}</DialogTitle>
                 <DialogContent>
                 <DialogContentText>
-                    Put a name to your project.
+                        Put a {props.object === 'Project' ? 'name' : 'description'} to your {props.object}.
                 </DialogContentText>
-                <TextField error={!errorName} autoFocus margin="dense" id="projectName" label="Project Name"
-                    type="text" fullWidth onChange={e => setProjectName(e.target.value)}
+                <TextField error={!errorName} autoFocus margin="dense" id="objectName" label={`${props.object} Name`}
+                    type="text" fullWidth onChange={e => setObjectName(e.target.value)}
                     onKeyUp = {
                         e => validateName(e.target.value)
                             ? setErrorName(true)
@@ -81,8 +80,8 @@ export function NewProjectCard(props) {
                 />
                 </DialogContent>
                 <DialogActions>
-                <Button variant="contained" onClick={createProject} color="primary" disabled={!errorName}>
-                    New project
+                <Button variant="contained" onClick={createObject} color="primary" disabled={!errorName}>
+                    New {props.object}
                 </Button>
                 <Button onClick={handleClose} color="primary">                  
                     CLOSE

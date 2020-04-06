@@ -1,1 +1,1 @@
-export { NewProjectCard } from './new-project-card';
+export { NewObjectCard } from './new-object-card';

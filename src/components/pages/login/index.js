@@ -14,10 +14,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
 import { axiosInstance } from '../../../sevices/http/http';
-import {
-  validateEmail,
-  validatePassword
-} from '../../atoms/validet-inputs';
+import { validateEmail, validatePassword } from '../../atoms/validet-inputs';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -175,12 +172,12 @@ const { vertical, horizontal, open } = state;
             variant="contained"
             color="primary"
             className={classes.submit}
-          >Sign In</Button>
+            >Sign In</Button>
           <Snackbar
             open={open}
             anchorOrigin={{ vertical, horizontal }}
             key={`${vertical},${horizontal}`}
-            autoHideDuration={5000}
+            autoHideDuration={4000}
             onClose={handleClose}
           >
             <Alert onClose={handleClose} severity="error">
