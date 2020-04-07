@@ -1,15 +1,15 @@
 'use strict'
 
 import React from 'react';
-import { BrowserRouter, Switch, Route, Redirect,Link } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { Container } from '@material-ui/core';
 
 import Header from '../components/organisms/header';
 import Footer from '../components/organisms/footer';
-import { listPublicRoutes, listPrivateRoutes, notFoundRoute } from './routes-list';
+import { listPublicRoutes, listPrivateRoutes } from './routes-list';
 import PrivateRoute from './privateRoutes';
 import NotFound from '../components/pages/not-found';
-import { userLogged } from '../sevices/http';
+import { userLogged } from '../sevices';
 
 export default function Router(props) {
 
@@ -44,8 +44,6 @@ export default function Router(props) {
                 ) : (null)))
             }          
               <Route component={NotFound} />
-            {/* </PrivateRoute> */}
-            {/* <Route component={NotFound} /> */}
           </Switch>
         </main>
       </Container>

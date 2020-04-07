@@ -28,7 +28,7 @@ const MessageAlert = forwardRef((props, ref) => {
   return (
       <div style={{ display: `${showingMessage ? 'block' : 'none'}` }}>
         <div className={props.error ? 'divError' : 'divSuccess'}>
-          <strong>{props.message}</strong>
+          {props.message}
         </div>
       </div>
   );

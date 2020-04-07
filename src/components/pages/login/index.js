@@ -108,6 +108,7 @@ const { vertical, horizontal, open } = state;
         props.history.push("/projects");
         })
         .catch(function (error) {
+          //console.log('historyerror', error.response.status)
           setErrorMessge(error.response.data.message);
           handleClick({ vertical: 'top', horizontal: 'center' })
           props.history.push("/");

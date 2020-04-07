@@ -10,12 +10,13 @@ import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
 import { Link, Redirect } from 'react-router-dom';
 
-import { NewObjectCard } from '../../molecules';
+import { NewObjectCard, UpdateObjectCard } from '../../molecules';
 import DeletedConfirmation from '../../atoms/deleted-confirmation';
 import Header from '../../organisms/header';
-
-
 import { axiosInstance } from '../../../sevices/http/http';
+
+import axios from 'axios'
+
 
 const styles = (theme) => ({
   cardGrid: {
@@ -47,15 +48,19 @@ class selectProjects extends Component {
   }
 
   componentDidMount(props) {
-          axiosInstance.get('projects')
+    const createCancelToken = () => axios.CancelToken.source()
+    const cancelToken = createCancelToken()
+          axiosInstance.get('projects',  { cancelToken: cancelToken.token })
               .then(response => {
-
                 let projects = response.data.data;
                     this.setState({
                       recentProjects: projects
                     })
               })
-              .catch(function (error) {
+            .catch(function (error) {
+                if (axios.isCancel(error)) {
+                  console.log('Request canceled', error.message);
+                }
                 //props.history.push("/");
                this.props.history.push("/");
               });  
@@ -72,7 +77,7 @@ class selectProjects extends Component {
       
       <React.Fragment>
         <Header/>
-        <NewObjectCard field="project" object="Project" action={this.handlerForceUpdate}/>
+        <NewObjectCard field="projects" object={this.state.recentProjects[0]} name="Project" action={this.handlerForceUpdate}/>
             <CssBaseline />
         <main>       
               <Container className={classes.cardGrid} maxWidth="md">
@@ -94,9 +99,7 @@ class selectProjects extends Component {
                               View
                             </Link>
                           </Button>
-                          <Button size="small" color="primary">
-                            Edit
-                          </Button>
+                          <UpdateObjectCard field="projects" object={project} name="Project" action={this.handlerForceUpdate}/>
                           <DeletedConfirmation
                             action={this.handlerForceUpdate}
                             id={project.id}

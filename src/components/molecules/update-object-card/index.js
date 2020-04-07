@@ -13,13 +13,13 @@ import { axiosInstance } from '../../../sevices/http/http';
 import { validateName } from '../../atoms/validet-inputs';
 import MessageAlert from '../../atoms/message-alert';
 
-import './new-object-card.css';
+import './update-object-card.css';
 
 import axios from 'axios'
 
 
-export function NewObjectCard(props) {
-    const [objectName, setObjectName] = useState();
+export function UpdateObjectCard(props) {
+    const [objectName, setObjectName] = useState(props.name === 'Project' ? props.object.name : props.object.description);
     const [open, setOpen] = useState(false);
     const [error, setError] = useState(false);
     const [errorName, setErrorName] = useState(false);
@@ -35,7 +35,7 @@ export function NewObjectCard(props) {
         setOpen(false);
     };
 
-    const createObject = async () => {
+    const updateObject = async () => {
         let object = {};
         props.field === 'projects'
             ? object.name = objectName
@@ -46,16 +46,16 @@ export function NewObjectCard(props) {
         const createCancelToken = () => axios.CancelToken.source()
         const cancelToken = createCancelToken()
         try {
-            const data = await axiosInstance.post(`${props.field}`, object, {
+            const data = await axiosInstance.put(`${props.field}/${props.object.id}`, object,{
                 cancelToken: cancelToken.token
             });
-            const { status } = data;
+            const { status } = data;            
             if (status) {
                 setError(false);
-                setMessage(`${props.name} successfully created.`);
+                setMessage(`${props.name} successfully updated.`);
                 ref.current.handleClick();
-                setObjectName('')
-                document.getElementById("objectName").value = "";
+                // setObjectName('')
+                // document.getElementById("objectName").value = "";
                 //setOpen(false);
                 props.action();
             };
@@ -72,20 +72,20 @@ export function NewObjectCard(props) {
     return (
         <div>
             <Grid container alignItems="flex-start" justify="center" direction="row" >
-                <Button variant="contained" color="primary" onClick={handleClickOpen} >
-                    Create new {props.name}
-                </Button>
+               <Button size="small" color="primary" onClick={handleClickOpen}>
+                    Edit
+               </Button>
             </Grid>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <MessageAlert ref={ref} message={message} error={error}/>
                 <DialogTitle id="form-dialog-title">{props.name}</DialogTitle>
                 <DialogContent>
                 <DialogContentText>
-                        Put a {props.name === 'Project' ? 'name' : 'description'} to your {props.name}.
+                        Edit a {props.name === 'Project' ? 'name' : 'description'} to your {props.name}.
                 </DialogContentText>
                     <TextField error={!errorName} autoFocus margin="dense" id="objectName"
                         label={`${props.name} ${props.name === 'Project' ? 'name' : 'description'}`}
-                        type="text" fullWidth onChange={e => setObjectName(e.target.value)}
+                        type="text" fullWidth onChange={e => setObjectName(e.target.value)} value={objectName}
                         onKeyUp = {
                             e => validateName(e.target.value)
                                 ? setErrorName(true)
@@ -94,8 +94,8 @@ export function NewObjectCard(props) {
                 />
                 </DialogContent>
                 <DialogActions>
-                <Button variant="contained" onClick={createObject} color="primary" disabled={!errorName}>
-                    New {props.name}
+                <Button variant="contained" onClick={updateObject} color="primary" disabled={!errorName}>
+                    Edit {props.name}
                 </Button>
                 <Button onClick={handleClose} color="primary">                  
                     CLOSE

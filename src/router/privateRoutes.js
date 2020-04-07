@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { Redirect } from 'react-router-dom'
-import { userLogged } from '../sevices/http'
+import { userLogged } from '../sevices'
 
 const PrivateRoute = (props) => (
     <Fragment>

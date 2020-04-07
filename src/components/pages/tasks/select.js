@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -8,38 +7,51 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
-import Box from '@material-ui/core/Box';
-import Switche from '../../atoms/switche.js';
 
+import Switche from '../../atoms/switche.js';
 import { axiosInstance } from '../../../sevices/http/http';
 import Header from '../../organisms/header';
+import { NewObjectCard, UpdateObjectCard } from '../../molecules';
+
+import axios from 'axios'
+
 
 class selectTasks extends Component {
-
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
+    this.handlerForceUpdate = this.handlerForceUpdate.bind(this);
     this.state = {
-      recentTasks: []
+      recentTasks: [],
+      projectId: ''
     }
   }
 
   componentDidMount() {
-    // const { id, field } = this.props.match.params;
-    
+    // const { id, field } = this.props.match.params; 
+    const { id } = this.props.match.params; 
+    this.state.projectId = id;
+    const createCancelToken = () => axios.CancelToken.source()
+    const cancelToken = createCancelToken()
     //       axiosInstance.get(`tasks/${field}/${id}`)
-          axiosInstance.get(this.props.match.url)
-            .then(response => {
 
+    axiosInstance.get(this.props.match.url, { cancelToken: cancelToken.token })
+            .then(response => {
               let tasks = response.data.data;
-              console.log('tasks',tasks)
                     this.setState({
                       recentTasks: tasks
                     })
               })
-              .catch(function (error) {
-                  console.log('Login  error', error);
+            .catch(function (error) {
+                if (axios.isCancel(error)) {
+                  console.log('Request canceled', error.message);
+                }
+                 this.props.history.push("/");
               });  
+  }
+
+  handlerForceUpdate() {
+    // this.forceUpdate();
+    this.componentDidMount();
   }
 
  makeStyles(theme) {
@@ -63,7 +75,8 @@ class selectTasks extends Component {
   render(){
     return (
       <React.Fragment>
-        <Header/>
+        <Header />
+        <NewObjectCard field="tasks" objectId={this.state.projectId} name="Task" action={this.handlerForceUpdate}/>
             <CssBaseline />
         <main>
           <h1 align="center">{'Project'}</h1>
@@ -77,19 +90,14 @@ class selectTasks extends Component {
                               <Typography gutterBottom variant="h5" component="h2">
                                 {card.description}
                               </Typography>
-                            </div>
-                          {/* <Typography>
-                            Description
-                          </Typography> */}
+                          </div>
                         </CardContent>
                         <CardActions>
                           <Switche checked={card.done} task={card}/>
-                          {/* <Button size="small" color="primary">
-                            View
-                          </Button> */}
-                          <Button size="small" color="primary">
+                          {/* <Button size="small" color="primary" disabled={card.done}>
                             Edit
-                          </Button>
+                          </Button> */}
+                          <UpdateObjectCard field="tasks" object={card} name="Task" action={this.handlerForceUpdate}/>
                         </CardActions>
                       </Card>
                     </Grid>

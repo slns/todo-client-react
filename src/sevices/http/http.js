@@ -1,4 +1,5 @@
 import axios from 'axios';
+//import { createHashHistory } from 'history';
 
 const TIMEOUT = 4000;
 const BASE_URL = 'http://localhost:3000/';
@@ -48,21 +49,28 @@ axiosInstance.interceptors.response.use(
 )
 
 function interceptorRequest(request) {
+    
     if (
         request.url !== 'login' &&
         request.url !== 'sign-up'
     ) {
         request.headers.Authorization = getTokenSession();
     }
+    
     return request;
 }
 
 function interceptorResponseSuccess(response) {
+    //const history = createHashHistory();
     if (response.config.url === 'login') {
         const data = response.data.data;
          setTokenSession(data.token);
          setUserSession(data.user);      
     }
+    // if (response.status === 401) {
+    //     console.log('history',history)
+    //     history.push('/login')
+    // }
     return response;
 }
 

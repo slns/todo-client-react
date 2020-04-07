@@ -10,7 +10,7 @@ import {
   makeStyles
 } from '@material-ui/core'
 
-import { getUserSession, userLogged } from '../../../sevices/http'
+import { getUserSession, userLogged } from '../../../sevices'
 
 const useStyles = makeStyles((theme) => ({
   root: {
